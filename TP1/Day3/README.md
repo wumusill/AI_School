@@ -134,80 +134,11 @@
 | 박혜민 | 날씨 정보 가져오기, 번역, 이메일 보내기(오류 너무 많이 나서 실습을 하나도 못했어요. 다시 해봐야겠습니다) |
 | --- | --- |
 | 박상우 | api를 이용하여 날씨 가져오기, 이메일 전송하기, 번역하는 함수를 만들고 학습하였습니다. |
-| 이선오 | API 개념, 사용방법
-API key, API doc
-API 링크를 통해 요청 보내기
-요청을 보낼 때 필요한 정보 링크에 포함시키는 방법
-json을 이용한 파이썬 문자열의 타입 변경
-lang 파라미터 추가로 언어를 변경하는 방법
-googletrans 라이브러리 import
-translate 함수 : translate(text, dect, src)
-SMTP : 간단하게 이메일을 보내기 위한 약속
-SMTP 서버 연결을 위한 재료 : Address, Port
-smtplib : SMTP에 쉽게 접근할 수 있는 라이브러리
-MIME : 메일 표준. SMTP에 이 형태로만 메일 요청 가능
-email.message 모듈의 EmailMessage 기능 활용
-Header : MIME 형태 중 하나로 Subject, From, To
-메일에 사진 첨부하는 함수 add_attachment
-add_attachment 재료 : image, maintype(첨부한 파일의 유형), subtype(확장자)
-binary : 컴퓨터가 읽고 이해하기 가장 편한 문자
-imghdr : 확장자를 파악해주는 파이썬 내장 모듈 |
-| 구자현 | Package(email, googletrans) 사용 방법을 실습을 통해 알아봤다.
-API를 이용하여 외부 서버에서 데이터를 가져올 수 있다.
-정규식을 이용해 사용자 입력값 제한을 코드 한 줄로 할 수 있다.
-json.loads() 함수는 dictionary 자료형을 return 한다. |
-| 권태윤 | 날씨 정보 받아오기:
-api에 대한 개념 이해
-f를 이용해 텍스트에 변수 넣기
-requests.get() 이용한 api데이터 가져오기
-json을 이용한 데이터 str->딕셔너리 형태 저장
-json 내부 특정 데이터 추출
-api 파라미터 추가 이용해 데이터 형식 바꾸기
-번역기:
-Translator() 사용하는 법
-translate함수 사용법
-언어 감지하는 법 및 번역하는 법
-파이썬으로 메일 보내기:
-SMTP작동 원리
-SMTP서버 연결하는 법
-MIME개념 이해& 변환 방법
-smtp.send_message()함수 사용법
-read, write, append기능 공부
-이미지 파일 바이너리 형식 전환
-정규 표현식 통한 메일 유효성 검증
-bool 함수 사용 방법 |
-| 김지현 | 1. API
-application programming interface
-응용 프로그래밍 인터페이스
-프로그램과 프로그램을 이어주는 인터페이스!
-ex) api 사용하여 날씨 정보 출력하는 프로그램
+| 이선오 | API 개념, 사용방법 <br> API key, API doc<br>API 링크를 통해 요청 보내기<br>요청을 보낼 때 필요한 정보 링크에 포함시키는 방법<br>json을 이용한 파이썬 문자열의 타입 변경<br>lang 파라미터 추가로 언어를 변경하는 방법<br>googletrans 라이브러리 import<br>translate 함수 : translate(text, dect, src)<br>SMTP : 간단하게 이메일을 보내기 위한 약속<br>SMTP 서버 연결을 위한 재료 : Address, Port<br>smtplib : SMTP에 쉽게 접근할 수 있는 라이브러리<br>MIME : 메일 표준. SMTP에 이 형태로만 메일 요청 가능<br>email.message 모듈의 EmailMessage 기능 활용<br>Header : MIME 형태 중 하나로 Subject, From, To<br>메일에 사진 첨부하는 함수 add_attachment<br>add_attachment 재료 : image, maintype(첨부한 파일의 유형), subtype(확장자)<br>binary : 컴퓨터가 읽고 이해하기 가장 편한 문자<br>imghdr : 확장자를 파악해주는 파이썬 내장 모듈 |
+| 구자현 | Package(email, googletrans) 사용 방법을 실습을 통해 알아봤다.<br>API를 이용하여 외부 서버에서 데이터를 가져올 수 있다.<br>정규식을 이용해 사용자 입력값 제한을 코드 한 줄로 할 수 있다.<br>json.loads() 함수는 dictionary 자료형을 return 한다. |
+| 권태윤 | 날씨 정보 받아오기:<br>api에 대한 개념 이해<br>f를 이용해 텍스트에 변수 넣기<br>requests.get() 이용한 api데이터 가져오기<br>json을 이용한 데이터 str->딕셔너리 형태 저장<br>json 내부 특정 데이터 추출<br>api 파라미터 추가 이용해 데이터 형식 바꾸기<br>번역기:<br>Translator() 사용하는 법<br>translate함수 사용법<br>언어 감지하는 법 및 번역하는 법<br>파이썬으로 메일 보내기:<br>SMTP작동 원리<br>SMTP서버 연결하는 법<br>MIME개념 이해& 변환 방법<br>smtp.send_message()함수 사용법<br>read, write, append기능 공부<br>이미지 파일 바이너리 형식 전환<br>정규 표현식 통한 메일 유효성 검증<br>bool 함수 사용 방법 |
+| 김지현 | 1. API<br>application programming interface<br>응용 프로그래밍 인터페이스<br>프로그램과 프로그램을 이어주는 인터페이스!<br>ex) api 사용하여 날씨 정보 출력하는 프로그램<br>크롤링은 한정적이고, 사이트에 표기된 것만 긁어올 수 있는 반면<br>api는 누군가 만들어둔 프로그램을 통해서 api key로 데이터를 가져와 쓸 수 있다<br>api doc: 사용방법 설명서<br>https://openweathermap.org/current<br>1) 링크를 만든다<br>공통 url+?+재료(파라미터)<br>2) 서버에 링크로 요청한다<br>requests 모듈<br>3) 예쁘게 만들어 텍스트 파일로 저장<br>json: 데이터를 주고받을 때 사용하는 포맷<br>4) 형태에서 언어, 값 단위 등도 바꿀 수 있음<br>2. 번역하기 (언어 감지/번역 라이브러리)<br>library: 모듈을 큰 기능 단위로 묶어놓은 것<br>라이브러리 > 모듈 > 기능 > 함수<br>Translator() : 번역기 기능<br>detect(text) : 언어 감지<br>translate(text, dest, src) : 번역할 문장, 목적 언어, 텍스트 언어(생략 가능)<br>3. 파이썬으로 메일 보내기<br>SMTP : 간단하게 메일을 보내기 위한 약속<br>SMTP 서버에는 주소와 포트번호(어떤 문을 열고 들어갈까?)가 존재<br>https://velog.io/@smearth18/멋쟁이사자처럼-ai-스쿨-220916 |
 
-크롤링은 한정적이고, 사이트에 표기된 것만 긁어올 수 있는 반면
-api는 누군가 만들어둔 프로그램을 통해서 api key로 데이터를 가져와 쓸 수 있다
-
-api doc: 사용방법 설명서
-https://openweathermap.org/current
-1) 링크를 만든다
-공통 url+?+재료(파라미터)
-2) 서버에 링크로 요청한다
-requests 모듈
-3) 예쁘게 만들어 텍스트 파일로 저장
-json: 데이터를 주고받을 때 사용하는 포맷
-4) 형태에서 언어, 값 단위 등도 바꿀 수 있음
-
-2. 번역하기 (언어 감지/번역 라이브러리)
-library: 모듈을 큰 기능 단위로 묶어놓은 것
-라이브러리 > 모듈 > 기능 > 함수
-
-Translator() : 번역기 기능
-detect(text) : 언어 감지
-translate(text, dest, src) : 번역할 문장, 목적 언어, 텍스트 언어(생략 가능)
-
-3. 파이썬으로 메일 보내기
-SMTP : 간단하게 메일을 보내기 위한 약속
-SMTP 서버에는 주소와 포트번호(어떤 문을 열고 들어갈까?)가 존재
-
-https://velog.io/@smearth18/멋쟁이사자처럼-ai-스쿨-220916 |
 
 ### 프로젝트 결과물을 보여주세요.
 
@@ -316,7 +247,7 @@ https://velog.io/@smearth18/멋쟁이사자처럼-ai-스쿨-220916 |
     
 - googletrans `AttributeError: 'NoneType' object has no attribute 'group'` 해결 방법
     
-    [](https://velog.io/@kir315/googletrans-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0)
+    [googletrans AttributeError](https://velog.io/@kir315/googletrans-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0)
     
 - 정규표현식
     
