@@ -11,11 +11,13 @@ results = soup.findAll('strong','list_title')
 
 # print(response.text)
 
-search_rank_file = open("rankresult.txt","a")
+# 파일 만드는 코드
+# search_rank_file = open("rankresult.txt","a")
 
 print(datetime.today().strftime("%Y년 %m월 %d일의 YTN 뉴스 순위입니다.\n"))
 
 for result in results:
-    search_rank_file.write(str(rank)+"위:"+result.get_text()+"\n")
+    # 파일에 result 기록
+    # search_rank_file.write(str(rank)+"위:"+result.get_text()+"\n")
     print(rank,"위 : ",result.get_text(),"\n")
     rank += 1
