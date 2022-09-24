@@ -250,13 +250,79 @@ print(p.match('PYTHON'))
 >>> <re.Match object; span=(0, 6), match='Python'>
 ```
 #### c. MULTILINE, M
-#### d. VERBOSE, X
+* `^` : 문자열의 처음을 의미
+  * `^python` : 문자열의 처음은 항상 `python`으로 시작해야 함
+* `$` : 문자열의 마지막을 의미
+  * `python$` : 문자열의 마지막은 항상 `python`으로 끝나야 함
 
+```python
+# ^python\s\w+ : python이라는 문자열로 시작하고 그 뒤에 whitespace, 그 뒤에 단어가 와야 한다는 의미
+p = re.compile("^python\s\w+")
+
+data = """python one
+life is too short
+python two
+you need python 
+python three"""
+
+print(p.findall(data))
+
+>>> ['python one']
+```
+
+```python
+p = re.compile("^python\s\w+", re.MULTILINE)
+
+data = """python one
+life is too short
+python two
+you need python 
+python three"""
+
+print(p.findall(data))
+
+>>> ['python one', 'python two', 'python three']
+```
+
+
+
+#### d. VERBOSE, X
+* 이해하기 어려운, 길이가 긴 정규식을 주석 또는 줄 단위로 구분하기 위한 방법
+* 문자열에 사용된 whitespace는 컴파일할 때 제거 (단, `[ ]`안에 사용된 whitespace는 제외)
+* 줄 단위로 `#` 기호를 사용하여 주석문 작성 가능
+```python
+charref = re.compile(r'&[#](0[0-7]+|[0-9]+|x[0-9a-fA-F]+);')
+
+charref = re.compile(r"""
+ &[#]                # Start of a numeric entity reference
+ (
+     0[0-7]+         # Octal form
+   | [0-9]+          # Decimal form
+   | x[0-9a-fA-F]+   # Hexadecimal form
+ )
+ ;                   # Trailing semicolon
+""", re.VERBOSE))
+```
 
 <br>
 
 ### - 백슬래시 (\\) 문제
+* 어떤 파일 안에 있는 `\section` 문자열을 찾기 위한 정규식
+* `\s` 문자가 whitespace로 해석되고 아래와 같은 의미가 됨
+  * `[ \t\n\r\f\v]ection`
+* 의도대로 매치하고 싶다면 다음과 같이 변경
+  * `\\section`
+```python
+p = re.compile('\\section')
+```
 
+* `\\section` 을 찾고 싶다면 : `\\\\section`
+  * 백슬래시가 너무 많으면 복잡하고 이해하기 어려움
+  * 이런 문제를 해결하기 위한 규칙
+    * 문자열 앞에 `r`문자를 삽입하면 백슬래시 2개 대신 1개만 써도 2개를 쓴 것과 동일한 의미
+```python
+re.compile(r'\\section')
+```
 
 <br>
 <br>
