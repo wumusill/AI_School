@@ -243,22 +243,3 @@ print(response.apparent_encoding)
    > [HTTP - 위키백과, 우리 모두의 백과사전](https://ko.wikipedia.org/wiki/HTTP) <br>
    > [점프 투 파이썬](https://wikidocs.net/133287) <br>
    > [Quickstart - Requests 2.28.1 documentation](https://requests.readthedocs.io/en/latest/user/quickstart/#response-content)
-
-
-<br>
-
-## ✅ 
-
-
-
-
-<br>
-
-## ✅ 
-
-
-
-
-<br>
-
-## ✅ 
