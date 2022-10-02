@@ -24,6 +24,10 @@ LIMIT 10;
 <br>
 
 ### - 조건문 : `WHERE`
+* `WHERE vs HAVING`
+  * `WHERE` : `GROUP BY` 전 데이터 필터링
+  * `HAVING` : `GROUP BY` 후 요약 정보 필터링 
+  * 가능하면 `WHERE` 구문에서 필터링 하는 것이 좋음 ➡️ 그룹화 과정에서 연산량이 더 적이지기 때문
 ```sql
 -- local이 "마포구" 인 row들만 출력
 SELECT *

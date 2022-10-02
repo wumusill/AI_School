@@ -70,6 +70,7 @@ GROUP BY id
 > [SQL Joins Visualizer](https://sql-joins.leopard.in.ua/) <br>
 > [실습 링크](https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all)
 ### - `INNER JOIN`
+* A와 B의 교집합
 ```sql
 # Old
 SELECT *
