@@ -10,6 +10,9 @@ Project/MiniP/data/
 Project/MiniP/일반_쇼츠_테스트_ver1.ipynb
 SL/week3/6f2df92a5bb7f7db.pdf
 SL/week3/dataset/
+*.pdf
+TP2/Tidy_data/apt*.csv
+
 
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
