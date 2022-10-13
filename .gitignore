@@ -6,13 +6,14 @@
 # website: http://jupyter.org/
 
 */miniproject1.ipynb
-Project/MiniP/data/
-Project/MiniP/일반_쇼츠_테스트_ver1.ipynb
+Project/MiniP1/data/
+Project/MiniP1/일반_쇼츠_테스트_ver1.ipynb
 SL/week3/6f2df92a5bb7f7db.pdf
 SL/week3/dataset/
 *.pdf
 TP2/Tidy_data/*.csv
-
+/Project/MidP/open
+TP2/Medical/data/*.csv
 
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
