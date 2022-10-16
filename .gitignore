@@ -14,6 +14,7 @@ SL/week3/dataset/
 TP2/Tidy_data/*.csv
 /Project/MidP/open
 TP2/Medical/data/*.csv
+Project/data
 
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
