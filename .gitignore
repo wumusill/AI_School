@@ -15,6 +15,9 @@ TP2/Tidy_data/*.csv
 /Project/MidP/open
 TP2/Medical/data/*.csv
 Project/data
+Project/MiniP2/b16ff8dafe94e70f
+TP2/Downcast/df.parquet.gzip
+TP2/Downcast/df.csv
 
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
