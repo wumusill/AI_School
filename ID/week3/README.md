@@ -20,7 +20,7 @@
 * `float` : 전체 `feature` 중 대상 `feature` 의 비율
 * `sqrt` : 전체 `feature` 중 제곱근 값
 * `auto` : `sqrt`와 동일
-* `log` : `feature`를 $$log_2()$$로 설정
+* `log` : `feature`를 log_2()로 설정
 
 ### `max_leaf_nodes`
 * `leaf node`의 최대 개수
