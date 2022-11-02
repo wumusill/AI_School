@@ -1,6 +1,8 @@
 # 🦁 TIL
 
 ## ✅ Titanic
+> python0501 & 0502 <br>
+
 [Titanic 데이터 출처](https://www.kaggle.com/competitions/titanic/data)
 * Kaggle data 활용, submission 실습
 * 하루 10번까지 제출 가능   
@@ -131,4 +133,96 @@ $$ I_E(f) = -\sum^m_{i=1}f_i\log_2f_i $$
 # 엔트로프 최댓값
 np.log2(3)
 >>> 1.584962500721156
+```
+
+
+<br>
+
+## ✅ One-Hot Encoding
+> python0503 <br>
+
+[pandas get_dummies 공식 문서](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html) 
+
+
+### - One-hot encoding이란
+* 범주형 데이터일 때, 각 카테고리를 하나의 새로운 열로 만들어 주는 방법
+  
+### - One-Hot Encoding을 하는 이유
+* 많은 머신러닝 알고리즘은 **입력 변수의 값이 수치형 데이터**여야 함
+* 그래야 손실 함수, 경사 하강법 등을 적용할 수 있음
+> * ex) {"A형" : 1, "B형" : 2, "O형" : 3, "AB형" : 4} == `Ordinal-Encoding`
+> * 하지만 위와 같이 변경하면 혈액형 사이에 크고 작다는 개념과 순서가 생김
+> * 엉뚱한 관계가 생기는 것을 방지하면서 수치형 데이터로 변환하기 위한 방법이 `One-Hot Encoding`
+
+### - One-Hot Encoding 전 데이터 전처리
+* 데이터 전처리를 할 때는 **train을 기준으로 진행**
+* 현실 세계의 test는 아직 모르는 데이터이기 때문
+* train 에만 등장하는 호칭은 학습을 해도 test 에 없기 때문에 예측에 큰 도움이 되지 않음
+* train 에만 등장하는 호칭은 피처로 만들어 주게 되면 피처의 개수 늘어남
+* 불필요한 피처가 생기기도 하고 데이터의 크기가 커지기 때문에 학습에 오랜 시간 소요
+* train과 test의 **피처 개수가 같아야 함, 다르면 오류**
+* 원핫 인코딩을 할 때 train, test **피처의 개수와 종류**가 같은지 확인해야 함
+* 너무 적게 등장하는 값을 피처로 만들면 일반화에 문제, 오버피팅 문제 발생
+
+
+
+### - `sklearn` vs `pandas`
+* `sklearn`을 사용하게 되면 일단 학습을 하고 전처리
+* 어떤 피처가 있는지 확인하고 test에 없는 값이라면 해당 피처를 생성
+
+
+* `pandas`의 `get_dummies`를 사용하면 train, test 각각 전처리를 하기 때문에 다른 값이 있다면 다른 컬럼으로 생성
+* 피처가 만들어지고 나서 다른 컬럼은 제외해주는 방법도 있음
+* 수치형 데이터는 제외하고 범주형 데이터만 알아서 Encoding 진행
+
+
+<br>
+
+> ❗️ 주의할 점 <br>
+> * 현실 세계에세 분석하는 데이터에 함부로 결측치를 채우는 것에 주의해야 함
+> * 머신러닝 알고리즘에서 오류가 발생하지 않게 하기 위해 결측치를 채우는 것
+> * 분석할 때도 채운다고 생각하면 안됨
+
+
+<br>
+
+### - kaggle 점수와 `cross validation` 점수가 다르다면 <br>
+* `cross validation` 점수가 더 높다면 ➡️ `train data`에 과적합
+
+
+<br>
+
+## ✅ 보간법
+> python0504 <br>
+
+[pandasa 보간법, interpolate 공식 문서](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.interpolate.html)
+
+* 이전 값과 다음 값을 이용하여 결측치를 채움
+* 대부분 시계열 데이터에서 데이터가 순서대로 있을 때 사용
+* 데이터가 앞, 뒤 값에 영향을 받는 데이터일 경우 사용 
+  * ex) 주식 데이터, 순서가 있는 센서 데이터
+
+<br>
+
+### - `df.fillna(method=)`
+```python
+# method로 채우는 방법
+# 앞에 있는 값으로 결측치 채움
+train["Age_ffill"] = train["Age"].fillna(method="ffill")
+# 뒤에 있는 값으로 결측치 채움
+train["Age_bfill"] = train["Age"].fillna(method="bfill")
+train[["Age", "Age_ffill", "Age_bfill"]]
+```
+
+
+<br>
+
+### - `interpolate`
+  
+```python
+# forward 방향으로 채우게 되면 맨 앞이 결측치일 경우 채워지지 않음
+train["Age"].interpolate(method="linear", limit_direction="forward")
+
+# both는 위, 아래 결측치를 모두 채우고 나머지는 채울 방향 설정
+train["Age_interpolate"] = train["Age"].interpolate(method="linear", limit_direction="both")
 ```
