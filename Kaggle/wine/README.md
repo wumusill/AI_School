@@ -103,3 +103,13 @@ df["col"] = labelenc.fit_transform(df["col"])
 
 ### - SGDClassifier
 [참고 자료](https://codingsmu.tistory.com/97)
+
+<br>
+
+## ✅ skew, 왜도
+
+* 왜도를 조절해야하는 이유 
+  * 이상치를 제거하기 위함
+* 분류에서는 정규분포를 맞춰야하는가?
+* 정규분포로 맞추는 이유
+  * 스케일을 통해 범위를 좁혀서 모델이 좀 더 잘 예측하게 하기 위해
