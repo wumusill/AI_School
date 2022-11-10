@@ -256,3 +256,11 @@ MSZoning_enc = enc.fit_transform(train[["MSZoning"]])
 [polynomial 공식 문서](https://scikit-learn.org/stable/modules/preprocessing.html#polynomial-features)
 * 히스토그램을 그렸을 때 어딘가는 많고 적은 데이터가 있다면 그것도 특징이 될 수 있는데
 * 특징이 잘 구분되지 않는다면 power transform 등을 통해 값을 제곱을 해주거나 하면 특징이 좀 더 구분되어 보임
+* 주어진 다항식의 차수 값에 기반하여 파생변수를 생성할 수 있음
+* 다항식 전개하는 이유?
+  * 데이터를 분석할 때 다항식 전개에 기반한 파생변수 생성 방법은 다소 유용하지 않을 수 있음
+  * 원래 변수를 보는 게 더 직관적, 이해하기 쉬움
+* 그러나 머신러닝 모델을 이용할 때 이것이 유용할 수 있음
+* 머신러닝 모델에서 유용한 이유?
+  * 머신러닝 모델은 label에 대해서 설명력이 높은 한 두가지 Feature에 의지할 때보다 여러가지 Feature에 기반할 때 성능 향상
+  * 소수의 Feature에 기반하게 되면 과대적합이 일어날 확률이 높아짐
