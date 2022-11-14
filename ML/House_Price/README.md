@@ -62,6 +62,7 @@ between the logarithm of the predicted value and the logarithm of the observed s
   * 제거 : `train`은 제거 가능, `test`는 제거 불가능
   * 평균 or 중앙값으로 대체하면 많이 왜곡될 수 있음 ex) 강남 아파트가 == 지방 아파트가 됨
     * 평균, 중앙값이 항상 정답은 아님
+    * 이상치를 탐지해야하는 문제도 있음
 
 
 <br>
@@ -70,7 +71,7 @@ between the logarithm of the predicted value and the logarithm of the observed s
 * `Categorical Feature`에서 빈도가 낮은 값
 * 일반적으로 희소값들을 적절한 값으로 대체함으로써 편리한 데이터 이용 가능
 * 처리 방법
-  * 결측치 처리
+  * 결측치 처리 ➡️ one-hot-encoding에서 사용하지 않음
   * 기타 category로 묶음
 > ❓왜 희소값 다뤄야할까❓ <br>
 >   * 데이터 경향 파악 어려움
@@ -160,10 +161,17 @@ rs.inverse_transform(train[["SalePrice_rs"]])
 * 작은 숫자들 사이는 벌어지고 큰 숫자들 사이는 좁아짐
 * 데이터가 고르게 분포하면 y값을 예측하기 유용
   
+<br>
+
+* 음수는 결측치 처리 됨
+* 음수 값에도 log를 취하고 싶다면 최솟값이 1이 될 수 있도록 (최솟값 + 1)만큼 더해줌
+* 마지막에 exp를 취하고 (최솟값 - 1)만큼 빼면 됨 
+  
 #### 고르게 분포된 데이터가 중요한 이유
 * 1, 4분위보다 2, 3분위가 상대적으로 더 중요
 * 예측하려는 값이 중간값에 가까운 값일 확률이 높음
-* 일반적으로 중간값을 잘 예측하는 모델이 예측 성능이 높은 모델
+  * 일반적으로 중간값을 잘 예측하는 모델이 예측 성능이 높은 모델
+* 데이터의 특성을 더 고르게 학습할 수 있음
 
 > 정규 분포 vs 표준 정규 분포 <br>
 > * 트리 모델은 일반 정규 분포를 사용해도 무관
@@ -177,6 +185,13 @@ rs.inverse_transform(train[["SalePrice_rs"]])
 ### - 이산화
 * Numerical Feature를 일정 기준으로 그룹화하는 것
 * ex) 10대, 20대로 나이 그룹화
+* RFM 기법에서도 종종 사용되는 기법
+  * Recency, Frequency, Monetary : 고객이 얼마나 최근에, 자주, 많이 구매했는지 분석
+  * 고객 군집화 시 사용
+* 연속된 수치 데이터를 구간화 ➡️ ML 모델에게 힌트
+* 트리모델이라면 데이터를 너무 잘게 나누지 않아 일반화에 도움
+* 나누는 기준에 따라 모델의 성능에 영향 ➡️ EDA를 통해 어떻게 나누는 것이 좋을지 확인
+* 잘못 나누면 성능 저하
 * 이산화 하는 이유?
   * 직관적
   * ML 모델 성능 개선
@@ -207,11 +222,21 @@ train["SalePrice_qcut"]= pd.qcut(train["SalePrice"], q=4, labels=[1, 2, 3, 4])
     * 부스팅 3대장 : Xgboost, LightGBM, catBoost
     * 부스팅 3대장과 같이 범주형 데이터를 알아서 처리해 주는 알고리즘도 있지만 sklearn에서는 별도의 처리 필요
 
+<br>
 
 * 사이킷런을 사용할 경우 train을 기준으로 fit, test 는 transform 만 함
 * test 에만 있는 값은 ohe 되지 않음
+* train, test를 concat하여 인코딩 후 train, test로 분리하는 방법
+  * test에만 등장하는 데이터를 피처로 사용하지 말라는 정책이 있을 경우 규칙 위반 
 * fit 하는 기준은 꼭 train
 * test 는 미래의 데이터, 어떤 데이터가 들어올지 모름
+
+<br>
+
+* `Ordinal Encoding`은 `Label Encoding`과 달리 변수에 순서를 고려한다는 점에서 큰 차이
+* `Label Encoding`은 알파벳 순서 혹은 데이터셋에 등장하는 순서대로 매핑 
+* `Oridnal Encoding`은 Label 변수의 순서 정보를 사용자가 지정해 가능
+* `LabelEncoder` 입력은 1차원 y 값, `OrdinalEncoder` 입력은 2차원 X값
 
 
 |encoding|장점|단점|
@@ -256,6 +281,8 @@ MSZoning_enc = enc.fit_transform(train[["MSZoning"]])
 [polynomial 공식 문서](https://scikit-learn.org/stable/modules/preprocessing.html#polynomial-features)
 * 히스토그램을 그렸을 때 어딘가는 많고 적은 데이터가 있다면 그것도 특징이 될 수 있는데
 * 특징이 잘 구분되지 않는다면 power transform 등을 통해 값을 제곱을 해주거나 하면 특징이 좀 더 구분되어 보임
+  * 반대로 너무 차이가 많이 나서 줄이고 싶다면 root, log, 스케일링 등 사용
+  * 정답은 없음
 * 주어진 다항식의 차수 값에 기반하여 파생변수를 생성할 수 있음
 * 다항식 전개하는 이유?
   * 데이터를 분석할 때 다항식 전개에 기반한 파생변수 생성 방법은 다소 유용하지 않을 수 있음
@@ -264,3 +291,63 @@ MSZoning_enc = enc.fit_transform(train[["MSZoning"]])
 * 머신러닝 모델에서 유용한 이유?
   * 머신러닝 모델은 label에 대해서 설명력이 높은 한 두가지 Feature에 의지할 때보다 여러가지 Feature에 기반할 때 성능 향상
   * 소수의 Feature에 기반하게 되면 과대적합이 일어날 확률이 높아짐
+
+<br>
+
+> SQL 로 관리하는 데이터와 파일로 관리하는 데이터는 어떻게 구분해서 관리할까요?
+> * sql 에 저장하는 데이터는 실시간으로 사용해야 하는 데이터
+> * 파일로 관리하는 데이터는 로그성 데이터
+
+<br>
+
+> SQL 로 실시간으로 관리할 데이터를 저장한다면 어떤 데이터가 있을까요?
+> * ex) 채팅, 장바구니, 로그인 정보, 상품 목록, 게시글 목록(partnermap으로 떠올려 보기)
+> * ex) 각종 status 값(게임의 캐릭터 위치, 캐릭터 정보, 게임머니, 캐릭터 가지고 있는 장비 인벤토리 정보)
+> * 쌓이는 용량이 어느정도냐에 따라 의사결정
+> * 아카이빙할 데이터는 대부분 파일로 저장
+> * 실시간으로 보여주어야 하는 현재 status 값만 DB에 저장해서 사용하기도 함
+> * status값을 업데이트 해서 SQL로 관리하고 아카이빙할 데이터는 파일로 저장
+> * 아카이빙 : 사용 빈도가 낮은 데이터들을 용량 확보나 장기 보관을 위해 따로 데이터를 보관
+
+<br>
+
+### - 특성 선택
+#### 분산 기반 필터링 
+```python
+# 범주형 type column만 가져오는 코드
+train.select_dtypes(include="O").columns
+
+# 범주형 데이터 비율 확인
+for col in train.select_dtypes(include="O").columns:
+    print(train[col].value_counts(1) * 100)
+    print("-" * 30)
+```
+
+
+<br>
+
+## ✅ House Price Feature Engineering
+### - 왜도, 첨도 확인
+* 평균과 중앙값이 같으면 왜도 = 0
+* 음수면 왼쪽에 긴 꼬리, 오른쪽에 많이 분포
+* 양수면 오른쪽에 긴 꼬리, 왼쪽에 많이 분포
+```python
+# 왜도 
+df[col].skew()
+```
+
+* 첨도값이 3에 가까우면 정규 분포 모얌
+* 파이썬에서는 Fisher의 정의를 사용하여 -3
+* 0이면 정규 분포에 가까운 모양 
+```python
+# 첨도()
+df[col].kurtosis()
+```
+
+<br>
+
+### - 결측치 비율이 높은 col 조회
+```python
+isna_mean = df.isnull().mean()
+null_feature = isna_mean[isna_mean > 0.8].index
+```
