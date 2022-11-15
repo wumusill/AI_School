@@ -327,7 +327,8 @@ for col in train.select_dtypes(include="O").columns:
 <br>
 
 ## ✅ House Price Feature Engineering
-### - 왜도, 첨도 확인
+### - 왜도
+* 양수, 음수, 0이거나 정의되지 않을 수도 있음
 * 평균과 중앙값이 같으면 왜도 = 0
 * 음수면 왼쪽에 긴 꼬리, 오른쪽에 많이 분포
 * 양수면 오른쪽에 긴 꼬리, 왼쪽에 많이 분포
@@ -336,6 +337,9 @@ for col in train.select_dtypes(include="O").columns:
 df[col].skew()
 ```
 
+<br>
+
+### - 첨도
 * 첨도값이 3에 가까우면 정규 분포 모얌
 * 파이썬에서는 Fisher의 정의를 사용하여 -3
 * 0이면 정규 분포에 가까운 모양 
@@ -344,10 +348,94 @@ df[col].skew()
 df[col].kurtosis()
 ```
 
+> 왜도, 첨도 수치까지 정확히 알아야 하는가
+> * 시각화로도 충분
+> * 하지만 변수가 수십 수백개라면 많은 시간 소요
+> * 이 때 왜도, 첨도 값을 이용하여 높은 값을 추출 & 전처리
+> * 하지만 `Anscomb's Quartet` 처럼 요약된 기술 통계는 데이터를 자세히 설명하지 못하는 부분이 있으므로 주의
+
+
 <br>
 
 ### - 결측치 비율이 높은 col 조회
+* 결측치가 많다고 삭제하는 것이 정답은 아님
+* 이상치, 특이값을 찾는다면 오히려 특정 값이 신호가 될 수 있음
+* 범주형 값이 결측치가 많을 때 인코딩하면 나머지 없는 값은 0으로 채워지게 됨
+* 그 대신 희소한 행렬
+* 수치형 값 결측치는 잘못 채웠을 때 오해할 수 있으니 주의가 필요
 ```python
 isna_mean = df.isnull().mean()
 null_feature = isna_mean[isna_mean > 0.8].index
 ```
+
+<br>
+
+### - log 변환, 수치형 변수 전처리
+* 범주형 데이터의 경우 로그 변환 불필요
+* `nunique()` , `select_dtypes()` 이용
+
+<br>
+
+* label에 log를 취하는 이유
+* 로그값은 작은 값에서 더 패널티를 주고 값이 커짐에 따라 완만하게 증가
+* 로그값이 작은 값에서 더 패널티를 주는 것은 그래프를 확인  
+* 예시
+  * a : 2억 ➡️ 4억으로 예측 
+  * b : 100억 ➡️ 110억으로 예측
+  * 어디에 더 패널티를 줄 것인가
+  * MAE : 오차의 절대값
+    * a : 2억 차이 
+    * b : 10억 차이
+  * MSE 
+    * a : 4억 차이 
+    * b : 100억 차이
+    * 오차가 크면 클수록 값은 더 벌어짐
+  * RMSLE 
+    * a : np.log(2) ➡️ 0.69 
+    * b : np.log(10) ➡️ 2.30 
+
+<br>
+
+### - squared features (Polynomials)
+* sklearn에서 제공하는 api를 사용
+* 직접 데이터에 제곱을 해주어도 됨
+* uniform, 균일한 분포에 사용
+
+<br>
+
+### - 범주형 변수 전처리
+* 범주형 데이터에 원핫인코딩 작업을 한다면 결측치를 남겨두어도 상관 없음
+* 없는 값은 변수로 생성되지 않음
+* train, test가 concat 되어 있다면 get_dummies 를 사용하는 것이 더 간단
+
+<br>
+
+### - KFold
+* 분할에 `random_state` 사용 가능
+* score가 변경될 때 분할의 영향이 없도록 하기 위해 고정
+```python
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_predict
+
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+y_valid_predict = cross_val_predict(model, X_train, y_train, cv=kf, n_jobs=-1)
+```
+
+<br>
+
+### - 데이터 형태 별 전처리
+#### 수치형
+* 결측치 대체(imputation)
+  * 너무 왜곡되지 않도록 주의
+* 스케일링 : Standard, Min-Max, Robust
+* 변환 : log
+* 이상치 제거 혹은 대체
+* 오류값 제거 혹은 대체
+* 이산화 : cut, qcut
+
+<br>
+
+#### 범주형 
+* 결측치 대체(imputation)
+* 인코딩 : label, ordinal, one-hot-encoding
+* 희소값 대체
