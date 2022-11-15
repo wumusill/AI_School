@@ -42,27 +42,3 @@ from sklearn.preprocessing import OneHotEncoder
 
 ohe = OneHotEncoder(handle_unknown="ignore")
 ```
-
-
-
-8️⃣8️⃣ 하조🐯
-
-🐯박혜정
-사실(Fact): 피처스케일링을 통해 예측모델을 만들고 kaggle에 제출해보았고, 선형회귀의 특징에 대해 배웠다.
-느낌(Feeling): 회귀분석에 대해 더 알아봐야겠다.
-교훈(Finding): 복습..!
-
-🐯구자현
-사실(Fact): house price 전처리 마무리 & 제출과 benz 실습 시작하였다
-느낌(Feeling): 메서드가 늘어날수록 새로운 에러를 만나게 되고 어렵다
-교훈(Finding): 메서드가 무슨 작업을 하는지, 어떤 것을 return하는지 확실히 하자
-
-🐯김영민
-사실(Fact): 피처엔지니어링을 실습하였고, 벤츠 데이터셋을 사용하여 간단한 EDA를 해보았다.
-느낌(Feeling):  아직 스스로 바로바로 실습을 못할 것 같다.
-교훈(Finding): 복습이 답이다 !
-
-🐯이영빈
-사실(Fact): 피쳐엔지니어링 부트캠프에 들어온 것같이 자세하게 알아보았다
-느낌(Feeling):  세상엔 똑똑한 사람들이 많고 나는 아직 경험치가 너무 부족하다
-교훈(Finding): 참고자료를 많이 접하고 컨디션 관리를 잘하자
