@@ -220,3 +220,48 @@ X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, rando
 * 모델 및 기능 분석을 위한 시각화 및 도구
 * 빠른 실행을 위해 무시 트리 또는 대칭 트리 사용
 * 과적합을 극복하기 위해 순서가 있는 부스팅 사용
+
+
+<br>
+
+## ✅ `learning_rate` vs `n_estimator`
+
+* `learning_rate`가 낮을 때, `n_estimator` 값을 높여 과적합 방지
+* 그렇다고 `n_estimator` 값이 높다면 과적합 가능성
+
+<br>
+
+* `learning_rate`를 줄이면 가중치 갱신의 변동폭 감소
+* 여러 학습기들의 결정 경계(decision boundary) 차이 감소
+* `n_estimators` 를 늘린다면 생성하는 `weak learner` 증가
+* `weak learner`이 많아진만큼 결정 경계(decision boundary)가 많아지면서 모델이 복잡해짐
+
+<br>
+
+
+* 부스팅 알고리즘에서 `n_estimators`와 `learning_rate`는 `trade-off` 관계
+* n_estimators(또는 learning_rate)를 늘리고, learning_rate(또는 n_estimators)을 줄인다면 서로 효과가 상쇄
+
+
+<br>
+
+* `n_estimator`는 순차적으로 생성되기 때문에 학습횟수를 의미
+* 부스팅 모델은 왜 오버피팅에 민감한가?
+  * 이전 트리(이전 학습)가 다음 트리(다음 학습)에 영향을 주기 때문
+
+<br>
+
+### - 배깅 & 부스팅 시각화
+* 배깅 모델은 시각화가 어려워 3rd party 도구를 이용하여 시각화
+* 그마저도 개별 트리 시각화는 어려움
+
+<br>
+
+* 그런데 부스팅 모델은 시각화가 가능하다 왜 그럴까?
+* 배깅모델은 병렬적으로 트리를 여러 개 생성, 부스팅은 순차적으로 생성하기 때문입니다. 
+
+
+<br>
+
+
+## ✅ 이진 분류 평가 지표
