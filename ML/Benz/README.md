@@ -319,3 +319,35 @@ X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, rando
 * `f1-score`
   * `Precision` 과 `Recall` 의 조화 평균
   * 둘 다 중요헌 경우 지표로 사용
+
+<br>
+
+## ✅ ML 관련 면접 가능 질문
+
+### 1) Cross Validation은 무엇이고 어떻게 해야하나요?
+* train set을 train set + validation set으로 분리한 뒤, validation set을 이용하여 모델을 검증하는 방법
+* 이를 위해서 train set을 특정 개수로 나누고 일부를 학습에, 일부를 평가에 사용
+* 데이터 셋을 순회하면서 분할된 모든 데이터 셋이 학습, 평가에 이용될 수 있도록 함
+
+### 2) 회귀 / 분류시 알맞은 metric은 무엇일까요?
+* 회귀의 경우 수치를 예측하는 모델이므로 오차를 계산하는 metric을 사용해야 함
+* 오차를 계산하는 metric에는 MSE, RMSE MAE 등이 있음
+* 분류의 경우 데이터의 클래스를 예측하는 모델이므로 클래스의 정확도를 계산하는 metric을 사용해야 함
+* 그 예로 f1-score, 정확도, 정밀도, 재현율이 있다.
+
+### 3) 알고 있는 metric에 대해 설명해주세요(ex. RMSE, MAE, recall, precision …)
+* [수치형 metric](https://github.com/wumusill/AI_School/tree/main/ML/Regression#-regression) 
+* [범주형 metric](https://github.com/wumusill/AI_School/tree/main/Kaggle/wine#-classification_report-%ED%95%B4%EC%84%9D)
+
+### 4) 정규화를 왜 해야할까요? 정규화의 방법은 무엇이 있나요?
+* 정규화의 목적은 수치형 데이터의 범위를 공통 척도로 변경하는 것
+* 머신러닝에 사용되는 데이터는 그 값이 너무 크거나 작지 않고 적당한 범위에 있어야 모델의 정확도가 높다고 알려짐
+* 알고리즘에 따라 다름, 회귀, SVM 등의 알고리즘에서는 효과가 좋지만, 결정트리에서는 효과가 없음
+* [변수 스케일링](https://github.com/wumusill/AI_School/tree/main/ML/House_Price#--%EB%B3%80%EC%88%98-%EC%8A%A4%EC%BC%80%EC%9D%BC%EB%A7%81)
+
+[출처](https://dongwooklee96.github.io/post/2021/11/06/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%A0%95%EA%B7%9C%ED%99%94%EB%9E%80-%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D.html)
+
+### 5) 부스팅 3대장 모델의 특징에 대해 설명해 주세요.
+* [XGBoost 특징](https://github.com/wumusill/AI_School/tree/main/ML/Benz#--xgboost)
+* [LGBM 특징](https://github.com/wumusill/AI_School/tree/main/ML/Benz#--lightgbm)
+* [CatBoost 특징](https://github.com/wumusill/AI_School/tree/main/ML/Benz#--catboost)
