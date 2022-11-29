@@ -8,7 +8,13 @@
 * 딥러닝
   * 인공지능 스스로 일정 범주의 데이터를 바탕으로 공통된 특징 도출
   * 그 특징으로 예측값 출력
+  * 주로 비정형 데이터를 다룸
 
+<br>
+
+* Fully Connected Network 에는 1차원 형태로 네트워크에 데이터를 주입해야 함
+* 어떻게 비정형 데이터(표형태가 아니라 이미지, 음성, 텍스트 등)를 잘 다룰까?
+* 전처리 레이어에서 이미지, 음성, 텍스트 등을 전처리 하는 기능을 따로 제공
 * 1950 년대 이전부터 신경망 연구
 * 그렇지만 하드웨어의 한계와 데이터 부족으로 정체
 
@@ -55,6 +61,54 @@
 * 순환 신경망(RNN)에서 쉽게 발생
 
 
-- 사실(Fact): SMOTE를 이용한 오버샘플링 기법을 실습했고 딥러닝 이론을 배웠다.
-- 느낌(Feeling): 새로운 단어와 코드로 정신이 없었다.
-- 교훈(Finding): 못 외운다. 익숙해지고 공식문서 찾아보는 버릇하자. 
+<br>
+
+
+## ✅ 코드
+```python
+model = tf.keras.models.Sequential([
+  # 입력층
+  tf.keras.layers.Flatten(input_shape=(28, 28)),
+  
+  # 은닉층
+  tf.keras.layers.Dense(128, activation='relu'),
+
+  # dropout layer
+  tf.keras.layers.Dropout(0.2),
+
+  # 출력층
+  tf.keras.layers.Dense(10, activation='softmax')
+])
+
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+```
+
+* dropout
+  * 딥러닝 모델의 일부 노드를 제거하고 사용하는 것
+  * 과대적합, 오버피팅을 방지하기 위함
+* optimizer
+  * 오차가 최소가 되는 지점을 찾기 위한 파라미터
+  * 기울기, 방향, learning rate를 고려 
+* loss : 손실율 측정
+* metrics : 평가지표
+* 시그모이드의 경우 활성 함수로는 잘 쓰지 않지만 이진 분류의 경우 출력 함수로 쓰임  
+    ||시그모이드|소프트맥스|
+    |:----:|:----:|:-----:|
+    |분류 종류|이진 분류|다중 클래스 분류|
+    |반환 값|1개로 반환|N개로 반환되며 모든 확률의 합이 1|
+    |값 선택|특정 임계값에 따라 값을 선택|가장 큰 값으로 반환되는 값을 해당 클래스로 선택|
+
+<br>
+
+### - 최적화 함수
+* 손실함수를 최소화하는 방향으로 가중치를 갱신하는 알고리즘
+* 경사하강법에 기반을 둔 optimizer 로는 `SGD`, `RMSProp`, `Adagrad`, `Adam` 
+* `SGD`, `Adam`, `RMSprop` 을 가장 많이 사용
+* 경사하강법 외 여러가지 지정할 수도 있지만 `adam` 에 비해 대부분 느린 속도
+* 대체적으로 `adam` 이 빠르고 학습도 잘하는 편
+
+![](../img/optimizer.jpg) <br>
+[출처](https://east-rain.github.io/docs/Deep%20Learning/basic%20deeplearning/optimization.html)
+
