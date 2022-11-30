@@ -106,7 +106,7 @@ between the logarithm of the predicted value and the logarithm of the observed s
 * `Normalization`
   * 평균울 빼고 표준 편차로 나누기
   * 평균 == 0
-  * 표준 편차 == 0
+  * 표준 편차 == 1
 * `Min-Max Scaling`
   * 최솟값을 빼고 (최댓값 - 최솟값)으로 나누기
   * 최솟값 == 0
@@ -119,9 +119,9 @@ between the logarithm of the predicted value and the logarithm of the observed s
 
 |이름|정의|장점|단점|
 |:-----:|:-----:|:-----:|:------:|
-|Normalization, <br> Standardization, <br> (Z-score scaling)|평균 제거, 데이터를 <br> 분산을 1로 맞게 조정|표준 편차가 1이고 0을 중심으로 <br> 표준 정규 분포를 갖도록 조정|변수를 왜곡하거나 이상치가 있으면 <br> 관측치를 압축하여 예측력 손상|
-|Min-Max Scaling|Feature를 지정된 범위로 확장하여 <br> 기능을 변환, 기본값 = [0, 1]|-|변수가 왜곡되거나 이상치가 <br> 있으면 관측치를 압축하여 예측력 손상|
-|Robust Scaling|중앙값을 제거하고 분위수 범위에 <br> 따라 데이터 크기 조정|편향된 변수에 대한 변환 후 <br> 변수의 분산을 더 잘 보존, <br> 이상치 제거에 효과적|-|
+|Normalization, <br> Standardization, <br> (Z-score scaling)|평균 제거, 데이터를 <br> 분산을 1로 맞게 조정|표준 편차가 1이고 <br> 0을 중심으로 <br> 표준 정규 분포를 <br> 갖도록 조정|변수를 왜곡하거나 이상치가 있으면 관측치를 압축하여 예측력 손상|
+|Min-Max Scaling|Feature를 지정된 범위로 확장하여 기능을 변환, 기본값 = [0, 1]|-|변수가 왜곡되거나 이상치가 <br> 있으면 관측치를 압축하여 예측력 손상|
+|Robust Scaling|중앙값을 제거하고 분위수 범위에 따라 데이터 크기 조정|편향된 변수에 대한 변환 후 <br> 변수의 분산을 더 잘 보존, <br> 이상치 제거에 효과적|-|
 
 
 ```python

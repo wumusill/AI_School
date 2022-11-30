@@ -92,13 +92,30 @@ model.compile(optimizer='adam',
   * 오차가 최소가 되는 지점을 찾기 위한 파라미터
   * 기울기, 방향, learning rate를 고려 
 * loss : 손실율 측정
+  * 데이터를 얼마나 잘 학습했는가, W, b값을 업데이트 해주기 웨해 사용
 * metrics : 평가지표
+  * 모델의 일반화 능력이 어느정도인가, 모델의 성능을 평가
 * 시그모이드의 경우 활성 함수로는 잘 쓰지 않지만 이진 분류의 경우 출력 함수로 쓰임  
     ||시그모이드|소프트맥스|
     |:----:|:----:|:-----:|
     |분류 종류|이진 분류|다중 클래스 분류|
     |반환 값|1개로 반환|N개로 반환되며 모든 확률의 합이 1|
     |값 선택|특정 임계값에 따라 값을 선택|가장 큰 값으로 반환되는 값을 해당 클래스로 선택|
+
+<br>
+
+### - 손실 함수
+* 모델의 오차를 측정
+* 이 함수를 최소화하는 것이 목적
+* 최적의 가중치를 찾도록 해야 함
+* 회귀 : `MSE`, `MAE`
+* 분류 :
+  * 바이너리(예측할 값의 종류가 둘 중 하나) :
+    * `binary_crossentropy`
+  * 멀티클래스(예측할 값의 종류가 2개 이상) :
+    * `categorical crossentropy`(one-hot형태의 클래스)
+    * `sparse categorical crossentropy`(ordinal encoding의 형태)
+
 
 <br>
 
@@ -112,3 +129,7 @@ model.compile(optimizer='adam',
 ![](../img/optimizer.jpg) <br>
 [출처](https://east-rain.github.io/docs/Deep%20Learning/basic%20deeplearning/optimization.html)
 
+<br>
+
+> * 보통 정형 데이터는 딥러닝보다 머신러닝이 대체적으로 좋은 성능
+> * 중요한 것은 모델보다 데이터 전처리와 피처 엔지니어링이 성능에 더 많은 영향
