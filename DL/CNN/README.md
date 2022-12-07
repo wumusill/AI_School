@@ -176,6 +176,13 @@ data_augmentation = keras.Sequential(
 )
 ```
 
+* 증강을 하면 안되는 경우
+  * 크롭이나 확대 ➡️ 장비 사진의 하늘에 노이즈를 확대하거나 크롭하면 문제가 될 수 있음
+  * 회전이나 반전 ➡️ 6을 180도 돌리면 9가 되기 때문에 숫자 이미지를 회전하지 않음
+  * 색상 변경 ➡️ 꽃의 경우 다양한 색상이 있기에 상관없지만 신호등 같이 안전과 직결되는 경우 변경 X
+  * 증강은 train 에만 적용
+  * 증강을 할 때는 현실 세계 문제와 연관해서 고민해봐야 함
+
 <br> 
 
 ## ✅ Malaria image load 1001
@@ -279,3 +286,129 @@ valDatagen = datagen.flow_from_directory(directory = 'cell_images/',
 
 > 성민님 <br>
 > 참고로 tensorflow.js 를 만드는 구글 브레인 팀에 의하면 conv2d 보다 tf.layers.separableConv2d(깊이별 분리 합성곱) 층이 같은 작업을 동일 하거나 훨씬 잘 수행하는 더 작고 빠른 신경망을 만들 수 있기 때문에 처음부터 신경망을 쌓는 경우라면 conv2d를 대체해서 사용하는 걸 추천한다고 함
+
+
+<br> 
+
+* CNN 모델을 학습시키는데 내 컴퓨터로 돌렸더니 메모리 오류가 났다면?
+* 일단 성능과 관계 없이 돌리고 싶다! 어떻게 해결하면 좋을까?
+* 돈을 쓰지 않고 해결하는 방법!
+  * 이미지 사이즈를 줄인다.
+  * 레이어를 줄인다.
+  * 필터수를 줄인다.
+  * 배치(한번에 다 불러오지 않고 나눠서 불러오게) 사이즈를 줄인다. ➡️ 모든 사진을 나눠서 조금씩 학습 
+
+<br>
+
+## ✅ Transfer learning
+[참고 자료](https://newindow.tistory.com/254) <br>
+[tf.keras.applications link](https://www.tensorflow.org/api_docs/python/tf/keras/applications) <br> 
+Keras Applications are premade architectures with pre-trained weights. <br>
+[keras 전이학습 가이드](https://keras.io/guides/transfer_learning/) <br>
+[VGG16 API 공식 문서](https://www.tensorflow.org/api_docs/python/tf/keras/applications/vgg16/VGG16)
+### - Transfer learning이란
+* 특정 분야에서 학습된 신경망(pre-trained)의 일부 능력을 유사하거나 전혀 새로운 분야에서 사용되는 신경망의 학습에 이용하는 방법
+* 학습 데이터의 수가 적을 때 효과적
+* 전이학습 없이 학습할 때보다 훨씬 높은 정확도와 빠른 학습 속도 제공
+* 전이 학습에 이용되는 pre-trained model
+  * ImageNet
+  * ResNet
+  * GoogLeNet
+  * VGGNet
+
+```python
+from tensorflow.keras.applications.vgg16 import VGG16
+
+vgg = VGG16(include_top=False, weights='imagenet', input_shape=(height, width, 3))
+
+model = Sequential()
+model.add(vgg)
+model.add(Flatten())
+
+# 이진 분류를 위한 출력층
+model.add(Dense(1, activation='sigmoid'))
+```
+> input_shape    optional shape tuple, only to be specified if include_top is False (otherwise the input shape has to be (224, 224, 3) (with channels_last data format) or (3, 224, 224) (with channels_first data format). It should have exactly 3 input channels, and width and height should be no smaller than 32. E.g. (200, 200, 3) would be one valid value.
+
+<br>
+
+### - include_top
+[출처](https://www.learndatasci.com/tutorials/hands-on-transfer-learning-keras/) <br>
+* 가장 상단의 fully connected layer들을 포함 시킬지의 여부
+* True
+
+![](../../img/ict.png)
+
+* False
+
+![](../../img/icf.png)
+
+<br>
+
+### - 모델 시각화
+```python
+from tensorflow.keras.utils import plot_model
+
+plot_model(model)
+```
+
+<br>
+
+### - Fine Tuning
+* 모델의 파라미터를 미세하게 조정하는 행위
+* 전이 학습 이후 나의 Task에 맞게 모델 파라미터를 업데이트하는 것
+
+<br>
+
+## ✅ weather classification
+```python
+def img_read_resize(img_path):
+    img = cv2.imread(img_path)
+
+    # cv에사는 BGR 사용, RGB로 변경
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    # 이미지 사이즈 통일
+    img = cv2.resize(img, (120, 120))
+    return img
+```
+
+```python
+def img_folder_read(img_label):
+    """
+    특정 이미지 폴더에 있는 이미지를 array 형태로 리스트에 담아주는 함수
+    """
+    # 이미지와 레이블을 담아줄 리스트
+    img_files = []
+    labels = []
+
+    # 이미지 레이블(폴더명)을 받아 이미지 경로 확인
+    wfiles = glob.glob(f"{root_dir}/{img_label}/*")
+
+    # 이미지 번호대로 경로 정렬
+    wfiles = sorted(wfiles)
+
+    # 경로 리스트를 순회하면서 이미지 경로 하나씩 확인
+    for w_img in wfiles:
+        try:
+            # 이미지 사이즈 조정해서 리스트에 추가
+            # 형식에 맞지 않는 이미지가 들어올 경우 에러
+            img_files.append(img_read_resize(w_img))
+            labels.append(img_label)
+        except:
+            continue
+
+    return img_files, labels
+```
+
+### - train_test_split
+* `fit(validation_split)`으로 나눠도 됨
+  * class가 균일하게 나눠지지 않는 단점 있음
+
+
+> RGB 왜 255? <br>
+> 현대의 대부분 모니터의 최대 지원 색 심도는 24비트입니다. (물론 더 많이 지원하는 모니터 들도 많이 나왔습니다)
+즉 각 픽셀은 2^24(~16.7M)의 색상을 표시할 수 있게 되어있고
+24비트 값을 각각 R G B  세개의 색상으로 나누자면 24비트 / 3이므로
+각 채널의 폭은 8비트를 가지게 되게 되었습니다.
+채널당 8비트라는것을 고려할때 0 ~ 255 (256개)의 숫자 값만 인코딩 할 수 있게 되는 것이 이치에 맞습니다.
