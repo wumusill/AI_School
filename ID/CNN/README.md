@@ -4,7 +4,6 @@
 
 ## ✅ Transfer Learning
 ### - Transfer Learning 개요
-* 한 분야
 * 큰 크기의 $D_A$로 `사전 학습된(pre-trained)` CNN을 불러와 feature extractor의 가중치를 초기 가중치로 사용
 * $T_A$ 와 $T_B$가 동일하지 않더라도 $D_A$ 와 $D_B$가 유사한 특징을 가진다면 `학습 속도 개선 및 정확도 향상` 
 * 특히 $D_B$ 의 크기가 매우 작을 때에도 `높은 정확도`
