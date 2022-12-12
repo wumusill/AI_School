@@ -401,6 +401,8 @@ def img_folder_read(img_label):
     return img_files, labels
 ```
 
+<br>
+
 ### - train_test_split
 * `fit(validation_split)`으로 나눠도 됨
   * class가 균일하게 나눠지지 않는 단점 있음
@@ -412,3 +414,55 @@ def img_folder_read(img_label):
 24비트 값을 각각 R G B  세개의 색상으로 나누자면 24비트 / 3이므로
 각 채널의 폭은 8비트를 가지게 되게 되었습니다.
 채널당 8비트라는것을 고려할때 0 ~ 255 (256개)의 숫자 값만 인코딩 할 수 있게 되는 것이 이치에 맞습니다.
+
+
+<br>
+
+### - from_logits
+[참고 자료](https://hwiyong.tistory.com/335)
+ 
+* 모델의 출력값이 문제에 맞게 normalize 되었느냐의 여부 
+* 예를 들어, 10개의 이미지를 분류하는 문제에서는 주로 softmax 함수를 사용
+* 이때, 모델이 출력값으로 해당 클래스의 범위에서의 확률을 출력한다면, 이를 logit=False라고 표현
+* logit이 아니라 확률값
+* 반대로 모델의 출력값이 sigmoid 또는 linear를 거쳐서 확률이 아닌 값이 나오게 된다면, logit=True라고 표현
+* 말 그대로 확률이 아니라 logit
+
+>클래스 분류 문제에서 softmax 함수를 거치면 from_logits = False(default),
+그렇지 않으면 from_logits = True.
+
+```python
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+```
+
+<br>
+
+* `history` 시각화를 해봤을 때 더 이상 val_loss 값이 감소하지 않는데, loss 값은 줄어든다면 오버피팅 되었다고 판단
+* 딱 수치가 얼마가 차이가 나면 오버피팅이다 이렇게 공식으로 얘기는 잘 하지 않는 편
+* val_loss 값이 나아지지 않는데 loss 값만 나아진다면 확실하게 오버피팅이라고 볼 수 있음
+
+
+<br>
+
+### - Tensorflow callback function
+[참고 자료](restore_best_weights)
+
+
+|parameter|설명|
+|:---:|:---:|
+|`monitor`|EarlyStopping의 기준이 되는 값|
+|`min_delta`|개선된 것으로 간주하기 위한 최소한의 변화량|
+|`patience`|monitor되는 값의 개선이 없을 경우, 무시하고 학습을 계속하는 횟수|
+|`verbose`|0 or 1 <br> 0일 경우, 화면에 나타냄 없이 종료 <br> 1일 경우 화면에 출력|
+|`mode`|`auto` or `min` or `max` <br> monitor 값이 최소가 되어야 하는지 최대가 되어야 하는지 설정 <br> `auto` 는 모델이 알아서 판단|
+|`baseline`|모델이 달성해야하는 최소한의 기준값|
+|`restore_best_weights`|가장 좋은 성능으로 되돌릴 수 파라미터 <br> True라면 monitor 값이 가장 좋았을 때의 weight로 복원|
+
+
+<br>
+
+### - FC층을 첫 layer부터 사용하지 않고 합성곱 연산을 사용한 이유
+[참고 자료](https://excelsior-cjh.tistory.com/180)
+* FC Layer는 flatten이 필요하기 때문에 지나치게 계산이 복잡해지고, 공간정보가 많이 손실
