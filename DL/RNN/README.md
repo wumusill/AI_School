@@ -255,3 +255,213 @@ def display_word_cloud_topic(topic, width=1200, height=500):
         print(f"topic list : {topic_list}")
 ```
 
+<br>
+
+## ✅ KoNLPy
+[KoNLPy 문서](https://konlpy.org/ko/latest/) <br>
+[형태소 분석기](https://docs.google.com/spreadsheets/d/1OGAjUvalBuX-oZvZ_-9tEfYD2gQe7hTGsgUpiiBSXI8/edit#gid=0)
+* `KoNLPy` : 형태소 분석기를 연결해주는 도구
+* 대표적인 자연어처리 도구인 NLTK, Spacy 는 한국어를 지원하지 않음 
+* 형태소 분석기마다 다른 Tagging
+* `mecab`이 가장 빨리보이지만 목적에 따라 선택해서 사용
+* `komoran`은 자바에서 사용할 수 있도록 만들어진 형태소 분석기
+  * 파이썬 황경에서 느리다고해서 다른 환경에서도 느린 것은 아님
+
+<br>
+
+* 문자열 전처리를 정규화 한다고 표현하기도 함
+* 정규화를 하면 불필요한 희소한 행렬이 생성되는 것을 방지
+* 같은 의미를 묶어줄 수 있음
+* 느린 학습 속도 방지
+* 멀티 스레드를 만들어 속도를 개선할 수 있음
+
+<br>
+
+### Kkma
+```python
+from konlpy.tag import Kkma
+
+kkma = Kkma()
+kkma.morphs(u'공부를 하면할수록 모르는게 많다는 것을 알게 됩니다.')
+>>> ['공부', '를', '하', '면', '하', 'ㄹ수록', '모르', '는', '것', 
+>>> '이', '많', '다는', '것', '을', '알', '게', '되', 'ㅂ니다', '.']
+
+kkma.nouns(u'대학에서 DB, 통계학, 이산수학 등을 배웠지만...')
+>>> ['대학', '통계학', '이산', '이산수학', '수학', '등']
+```
+
+<br>
+
+### PeCab
+```python
+from pecab import PeCab
+
+pecab = PeCab()
+pecab.pos("저는 삼성디지털프라자에서 지펠냉장고를 샀어요.")
+>>> [('저', 'NP'), ('는', 'JX'), ('삼성', 'NNP'), ('디지털', 'NNP'), ('프라자', 'NNP'), ('에서', 'JKB'), ('지', 'NNP'), 
+>>> ('펠', 'NNP'), ('냉장고', 'NNG'), ('를', 'JKO'), ('샀', 'VV+EP'), ('어요', 'EF'), ('.', 'SF')]
+```
+
+<br>
+
+### Okt 
+* stemming(어간 추출) 기능 제공
+```python
+from konlpy.tag import Okt
+
+okt = Okt()
+
+okt.pos(small_text)
+>>> [('버스', 'Noun'), ('의', 'Josa'), ('운행', 'Noun'), ('시간', 'Noun'), ('을', 'Josa'), 
+>>> ('문의', 'Noun'), ('합니다', 'Verb'), ('.', 'Punctuation'), ('어', 'Eomi'), ('?!', 'Punctuation')]
+
+ okt.pos(small_text, stem=True)
+ >>> [('버스', 'Noun'), ('의', 'Josa'), ('운행', 'Noun'), ('시간', 'Noun'), ('을', 'Josa'), 
+ >>> ('문의', 'Noun'), ('하다', 'Verb'), ('.', 'Punctuation'), ('어', 'Eomi'), ('?!', 'Punctuation')]
+```
+
+<br>
+
+## ✅ Tokenizer
+[공식 문서](https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/text/Tokenizer) <br>
+> 시퀀스 방식의 인코딩을 사용 <br>
+> Bag of Words 와 TF-IDF 방식과 시퀀스 방식이 어떤 차이가 있는지 알아보자
+
+
+
+* 시퀀스(순서) 방식의 인코딩은 시퀀스(순서)를 고려하는 알고리즘(RNN)에서 더 나은 성능
+* 머신러닝에서 사용했을 때는 오히려 TF-IDF 가 더 나은 성능을 보여주기도 함
+
+<br>
+
+* 각 텍스트를 일련의 정수(각 정수는 사전에 있는 토큰의 인덱스임) 또는 단어 수에 따라 각 토큰의 계수가 이진일 수 있는 벡터로 변환
+* 텍스트 말뭉치를 벡터화할 수 있음 (tf-idf 기반)
+
+
+### parameter
+* `num_words`
+  * 단어 빈도에 따라 유지할 최대 단어 수, 가장 일반적인 단어 만 유지
+* `filters`
+  * 각 요소가 텍스트에서 필터링될 문자인 문자열, 기본값은 문자를 제외한 모든 구두점과 탭 및 줄 바꿈
+* `lower`
+  * bool. 텍스트를 소문자로 변환할지 여부
+* `split`
+  * str. 단어 분할을 위한 구분 기호
+* `char_level`
+  * True이면 모든 문자가 토큰으로 처리
+* `oov_token`
+  * 주어진 경우, 그것은 word_index에 추가되고 text_to_sequence 호출 중에 어휘 밖의 단어를 대체하는 데 사용
+
+1. Tokenizer 인스턴스 생성
+2. fit_on_texts와 word_index를 사용하여 key value로 이루어진 딕셔너리를 생성
+3. texts_to_sequences를 이용하여 text 문장을 숫자로 이루어진 리스트로 변경
+4. 마지막으로 pad_sequences를 이용하여 리스트의 길이를 통일화
+
+```python
+tf.keras.preprocessing.text.Tokenizer(
+    num_words=None,
+    
+    # 특수문자는 기본적으로 제거
+    filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n',
+    
+    # 기본 다 소문자
+    lower=True,
+    
+    # 띄어쓰기 기준 분리
+    split=' ',
+    char_level=False,
+    oov_token=None,
+    analyzer=None,
+    **kwargs
+)
+
+
+from tensorflow.keras.preprocessing.text import Tokenizer
+
+vocab_size = 7
+tokenizer = Tokenizer(num_words=vocab_size)
+```
+* 단어 수를 너무 많이하면 문장 길이가 제각각이고 학습시간이 오래걸림
+* 단어수를 제한하면 어휘에 없는 단어가 등장했을 때 시퀀스에 누락
+* 누락된 값을 처리하는 방법에는 여러가지
+* oov_token 을 사용하면 없는 어휘 표현 방식 설정 가능
+* 빈도수가 같은 단어들은 먼저 나오는 단어들을 우선순위
+
+<br>
+
+### - pad_sequence
+* 길이가 맞지 않기 때문에 제대로 array가 만들어지지 않고 안에 그냥 리스트가 들어간 모습
+* 길이를 맞춰줘야 함
+* padding을 이용하여 길이를 맞춤
+```python
+import numpy as np
+
+np.array(corpus_sequences)
+
+>>> array([list([4, 1, 1, 2]), list([1, 1, 3, 2]), list([1, 3, 2])], dtype=object)
+```
+
+
+
+```python
+pad = pad_sequences(corpus_sequences)
+
+print(corpus_sequences)
+print("-" * 40)
+print(pad)
+
+>>> [[4, 1, 1, 2], [1, 1, 3, 2], [1, 3, 2]]
+>>> ----------------------------------------
+>>> [[4 1 1 2]
+>>>  [1 1 3 2]
+>>>  [0 1 3 2]]
+
+###############################################################
+
+pad = pad_sequences(corpus_sequences, maxlen=10)
+
+print(corpus_sequences)
+print("-" * 40)
+print(pad)
+
+>>> [[4, 1, 1, 2], [1, 1, 3, 2], [1, 3, 2]]
+>>> ----------------------------------------
+>>> [[0 0 0 0 0 0 4 1 1 2]
+>>>  [0 0 0 0 0 0 1 1 3 2]
+>>>  [0 0 0 0 0 0 0 1 3 2]]
+
+###############################################################
+
+pad = pad_sequences(corpus_sequences, maxlen=10, padding="post")
+
+print(corpus_sequences)
+print("-" * 40)
+print(pad)
+
+>>> [[4, 1, 1, 2], [1, 1, 3, 2], [1, 3, 2]]
+>>> ----------------------------------------
+>>> [[4 1 1 2 0 0 0 0 0 0]
+>>>  [1 1 3 2 0 0 0 0 0 0]
+>>>  [1 3 2 0 0 0 0 0 0 0]]
+```
+
+<br>
+
+## ✅ RNN
+* 순환 신경망(Recurrent neural network, RNN)은 인공 신경망의 한 종류로, 유닛간의 연결이 순환적 구조를 갖는 것이 특징
+* 순환 신경망이라는 이름은 입력받는 신호의 길이가 한정되지 않은 동적 데이터를 처리한다는 점에서 붙여진 이름
+* 유한 임펄스 구조와 무한 임펄스 구조 모두 해당 
+* 유한 임펄스 순환 신경망은 유향 비순환 그래프이므로 적절하게 풀어서 재구성한다면 순방향 신경망으로도 표현할 수 있음
+* 무한 임펄스 순환 신경망은 유향 그래프임, 고로 순방향 신경망으로 표현하는 것이 불가능
+
+* 순환 신경망은 추가적인 저장공간을 가질 수 있다. 이 저장공간이 그래프의 형태를 가짐으로써 시간 지연의 기능을 하거나 피드백 루프를 가질 수도 있다. 이와 같은 저장공간을 게이트된 상태(gated state) 또는 게이트된 메모리(gated memory)라고 하며, LSTM과 게이트 순환 유닛(GRU)이 이를 응용하는 대표적인 예시이다.
+
+* 입력 갯수 출력 갯수에 따라서 one to many, many to one, many to many 로 나눠지지만 핵심은 타임스텝으로 이전 hidden state 의 아웃풋과 현시점의 인풋이 함께 연산
+
+* One to one - 가장 기본적인 모델
+* One to many - 하나의 이미지를 통해 문장으로 표현할 수 있음
+* Many to one - 영화 리뷰를 통해 긍정 또는 부정으로 감정을 분류 가능
+* Many to many - 여러 개의 단어를 입력받아 여러 개의 단어로 구성된 문장을 반환하는 번역기, 동영상의 경우 여러 개의 이미지 프레임에 대해 여러 개의 설명이나 번역 형태로 출력
+
+
+* RNN의 경우 층을 깊게 쌓지 않음
