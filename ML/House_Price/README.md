@@ -104,7 +104,7 @@ between the logarithm of the predicted value and the logarithm of the observed s
 ### - 자주 쓰이는 스케일링 기법 3가지
 
 * `Normalization`
-  * 평균울 빼고 표준 편차로 나누기
+  * 평균을 빼고 표준 편차로 나누기
   * 평균 == 0
   * 표준 편차 == 1
 * `Min-Max Scaling`
