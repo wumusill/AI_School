@@ -1,6 +1,6 @@
 # 🦁 TIL
-[딥러닝을 이용한 자연어 처리 입문](https://wikidocs.net/book/2155)
-[AI 142가지 데이터셋](https://needleworm.github.io/dataset/)
+[딥러닝을 이용한 자연어 처리 입문](https://wikidocs.net/book/2155) <br>
+[AI 142가지 데이터셋](https://needleworm.github.io/dataset/) <br>
 [BLSTM 정은쓰 추천 자료](https://blog.naver.com/ssj860520/222820930221)
 
 ## ✅ Natural Language Processing, NLP
