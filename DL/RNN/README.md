@@ -627,3 +627,69 @@ print(pad)
     * backward_layer 설정하지 않는 경우, 레이어 인수로 전달된 레이어 인스턴스는 자동으로 백레이어를 생성하는 데 사용
     *  제공된 backward_layer 계층은 특히 stateful, return_states, return_sequence 등에 대해 동일한 값이어야 하지만, backward_layer와 layer는 서로 다른 go_backwards 인수값을 가져야 함. 그렇지 않으면, ValueError 발생
 
+<br>
+
+## ✅ 주가 시계열 예측
+[tensorflow 시계열 예측 공식 문서](https://www.tensorflow.org/tutorials/structured_data/time_series)
+### - 시계열 데이터
+![](../../img/time.gif) <br>
+[출처](https://stackoverflow.com/questions/31947183/how-to-implement-walk-forward-testing-in-sklearn
+)
+* 지금까지 데이터를 나눌 때 섞어서 랜덤으로 나눔
+* 시계열 데이터에서는 섞어서 나누지 않고 순서를 고려하여 나눔
+  * 언어의 맥락 때문에 시퀀스 인코딩을 했던 것처럼 시계열 데이터에서도 순서가 중요하기 때문
+
+<br>
+
+### - 데이터 창 작업, window_size
+
+![](../../img/time2.png) <br>
+[출처](https://ceur-ws.org/Vol-2322/DARLIAP_13.pdf)
+* 1주일 간의 데이터 예측한다고 했을 때 한 번에 1주일의 데이터를 예측하면 성능이 엄청나게 떨어짐
+* 그 전 날까지의 데이터를 가지고 하루를 예측하고 다시 다음날을 예측하기를 반복
+* window_size가 없다면 회귀와 다를게 없음
+
+> 회귀 vs 시계열
+> * 회귀를 통해서도 예측이 가능
+> * 여러 변수를 고려해서 수치데이터를 예측할 때 회귀 모델을 사용
+
+<br>
+
+### - 정규화
+```python
+# MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
+
+# 나중에 복원이 편리하게 x, y를 따로 스케일링
+mmsx = MinMaxScaler()
+mmsy = MinMaxScaler()
+
+# x
+x_mm = mmsx.fit_transform(dfx)
+# y
+y_mm = mmsy.fit_transform(dfy.to_frame())
+```
+* 나중에 y값 복원이 편리하게 위해 x, y를 따로 스케일링
+* fit_transform의 경우 1차원 데이터는 받지 않음
+* y 값은 1차원의 벡터 형태이기 때문에 to_frame을 이용하여 reshape
+* 윈도우를 고려하지 않은 데이터 ➡️ 데이터에 윈도우 적용
+
+<br>
+
+### - window_size
+[tensorflow API](https://www.tensorflow.org/tutorials/structured_data/time_series#4_tfdatadataset_%EB%A7%8C%EB%93%A4%EA%B8%B0)
+```python
+from tqdm import trange
+x_data = []
+y_data = []
+
+# 0번에서 9번 까지의 데이터를 가져와서 10번 데이터를 예측
+# 1번에서 10번 까자의 데이터를 가져와서 11번 데이터를 예측
+for start in trange(len(y_mm) - window_size):
+    stop = start + window_size
+    print("start :", start, "end :", stop, end=", ")
+
+    # 해당 시점의 윈도우가 행이 되도록 함
+    x_data.append(x_mm[start:stop])
+    y_data.append(y_mm[stop])
+```
