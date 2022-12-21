@@ -34,6 +34,8 @@
 <br>
 
 ### - RFM
+![](../../img/RFM.jpeg) <br>
+[조은님 추천 자료 & 사진 출처](http://www.itdaily.kr/news/articleView.html?idxno=8371)
 * 가치있는 고객을 추출해내어 이를 기준으로 분류할 수 있는 분석 방법
 * 구매 가능성이 높은 고객을 선정하기 위한 분석 방법
 * `Recency`
@@ -79,6 +81,52 @@
   * 심리 정보 - 구매욕구
   * 행동 정보 - 구매패턴 Life Time Value
 
+<br>
+
+### - 고객 분류
+* `cut`
+  * 절대 평가
+  * 특정 기준을 넘는 고객과 못넘는 고객으로 분류
+* `qcut`
+  * 상대 평가
+  * 기준보다 모든 고객 중 상대적으로 등급 부여
+  * 같은 비율로 나누고자 한다면 사용
+```python
+# 1부터 10까지 3 묶음으로 나눠라
+pd.qcut(range(1, 11), 3, labels=["high", "mid", "low"])
+
+# 1부터 10까지 5 묶음으로 나눠라
+pd.qcut(range(1, 11), 3, labels=range(1, 6))
+```
+
+[린 분석](https://www.slideshare.net/xguru/with-lean-analytics-with-lezhin-comics)<br>
+[서비스 기획자를 위한 데이터 분석 시작하기](https://www.slideshare.net/leoyang991/ss-90038927) <br>
+[토스 세션 영상](https://www.youtube.com/watch?v=GFERag7kjFM&list=PL1DJtS1Hv1Piv_MQIHgA_CdNsXyDM9UDM&ab_channel=%ED%86%A0%EC%8A%A4) <br>
+[토스 세션 정리](https://brunch.co.kr/@ashashash/186) 
+
+* R : 값이 작을 수록 높은 점수 : 최근에 왔는지를 보기 때문
+* F : 값이 높을 수록 높은 점수 : 자주 왔는지를 보기 때문
+* M : 값이 높을 수록 높은 점수 : 얼마나 많은 금액을 구매했는지 보기 때문
+
+<br>
+
+* dt.timedelta(days=1) : 날짜 연산
+* 1을 더하는 이유
+  * 마지막 영업일과 같은날 거래했다면 0이 아닌 1이 나오게 하기 위함
+```python
+last_timestamp = df["InvoiceDate"].max() + dt.timedelta(days=1)
+```
+
+* `groupby` 에서도 `lambda` 사용 가능
+```python
+df.groupby("CustomerID").agg({"InvoiceDate" : lambda x: (last_timestamp - x.max()).days , "InvoiceNo": "count"})
+```
+
+* `assign`
+* 여러 변수를 한 번에 만들고 싶을 때 사용
+```python
+rfm = rfm.assign(R=r_cut, F=f_cut, M=m_cut)
+```
 
 <br>
 
@@ -106,3 +154,38 @@
 * `ARPPU(Average Revenue Per Paying User)`
   * [네이버 백과](https://terms.naver.com/entry.naver?docId=2028542&cid=42914&categoryId=42915)
   * 지불 유저 1명 당 한 달에 결제하는 평균 금액을 산정한 수치
+
+<br>
+
+## ✅ Clustering
+* 대표적인 비지도 학습 방법
+* 주어진 데이터들의 특성을 고려해 데이터 집단(Cluster)을 정의하고 데이터 집단을 대표할 수 있는 대표점을 찾는 것이 목표
+* Cluster
+  * 비슷한 특성을 가진 데이터들의 집단
+  * 데이터의 특성이 다르면 다른 클러스터에 속해야 함
+* 효율성
+  * Cluster 분석을 통해 수백만의 데이터를 직접 확인하지 않고 각각 Cluster의 대표값만 확인해 전체 데이터의 특성을 파악
+
+|종류|매개변수|확장성|사례|알고리즘|
+|:---:|:---:|:---:|:---:|:---:|
+|K-Means|number of clusters|가장 큰 n_samples <br> n_clusters에 MiniBatch code|범용, 균일한 클러스터 크기 <br> 평평한 기하학, 유도성 <br> 클러스터가 너무 많지 않음|점 사이의 거리|
+|Affinity propagation|damping, <br> sample preference|n_samples로 확장 불가능|많은 클러스터, <br> 고르지 않은 클러스터 크기 <br> 평평하지 않은 기하학, 귀납적|그래프 거리, <br> 가장 가까운 이웃 그래프|
+|Mean-shift|bandwidth|n_samples로 확장 불가능|많은 클러스터, <br> 고르지 않은 클러스터 크기 <br> 평평하지 않은 기하학, 귀납적|점 사이의 거리|
+|Spectral clustering|number of clusters|중형 n_samples <br> 소형 n_clusters|적은 수의 클러스터 <br> 클러스터 크기, 평평하지 않은 기하학, 변형|그래프 거리, <br> 가장 가까운 이웃 그래프|
+|DBSCAN|neighborhood size|대형 n_samples <br> 중형 n_clusters|평평하지 않은 기하학 <br> 고르지 않은 클러스터 크기, 변형|가장 가까운 지점 간의 거리|
+
+<br>
+
+### - K-means
+* 이상치에 예민
+* 입력값
+  * k : 클러스터 수
+  * D : n개의 데이터 오브젝트를 포함하는 집합
+* 출력값
+  * k개의 클러스터
+* 알고리즘
+  1. 데이터 오브젝트 집합 D에서 k개의 데이터 오브젝트를 임의로 추출
+  2. 데이터 오브젝트들을 각 클러스터의 중심으로 설정
+  3. 집합 D의 각 데이터 오브젝트들에 대해 k개의 클러스터 중심 오브젝트와의 거리를 각각 구하고, <br> 각 데이터 오브젝트가 어느 중심점과 가장 유사도가 높은지 알아낸다. <br> 그렇게 찾아낸 중심점으로 각 데이터 오브젝트들을 할당 
+  4. 클러스터의 중심점을 다시 계산. 3에서 재할당된 클러스터들을 기준으로 중심점을 다시 계산
+  5. 각 데이터 오브젝트의 소속 클러스터가 바뀌지 않을 때까지 3, 4 반복
